@@ -1,20 +1,46 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import {
+  StyleSheet,
+  RefreshControl,
+  SafeAreaView,
+  ScrollView,
+} from "react-native";
+import { WebView } from "react-native-webview";
 
-export default function App() {
+const App = () => {
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, []);
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    // <SafeAreaView style={styles.main}>
+    <ScrollView
+      contentContainerStyle={styles.scrollView}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
+      <WebView
+        style={styles.main}
+        source={{ uri: "https://it-support-six.vercel.app/jp" }}
+      />
+    </ScrollView>
+    // {/* </SafeAreaView> */}
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
+  main: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    // marginTop: 30,
+  },
+  scrollView: {
+    flex: 1,
   },
 });
+
+export default App;
